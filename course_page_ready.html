@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程页面</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f10;
+    --surface: #1a1a1d;
+    --surface2: #232326;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0ede8;
+    --text-muted: #888;
+    --accent: #d4a85a;
+    --accent-dim: rgba(212,168,90,0.12);
+    --green: #4caf7d;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans SC', 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* TOP HEADER */
+  .header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .header-logo {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .header-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* VIDEO */
+  .video-wrap {
+    width: 100%;
+    background: #000;
+    position: relative;
+    aspect-ratio: 16/9;
+  }
+  .video-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  /* Placeholder shown when no real video */
+  .video-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .play-circle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .play-circle svg { margin-left: 4px; }
+  .video-placeholder p { font-size: 13px; color: var(--text-muted); }
+
+  /* CONTENT */
+  .content {
+    padding: 22px 20px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .lesson-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .lesson-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .lesson-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 22px 0;
+  }
+
+  /* OUTLINE */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .outline-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .outline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .outline-num {
+    min-width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .outline-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .outline-text small {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* RESOURCES */
+  .resource-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .resource-link:hover { border-color: var(--accent); }
+  .resource-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--accent-dim);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .resource-icon svg { color: var(--accent); }
+  .resource-name { flex: 1; }
+  .resource-arrow { color: var(--text-muted); font-size: 16px; }
+
+  /* NEXT LESSON */
+  .next-card {
+    margin-top: 28px;
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .next-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .next-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .next-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: var(--accent);
+    color: #0f0f10;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-logo">你的课程名称</span>  <!-- ✏️ 改成你的课程名 -->
+  <span class="header-label">学员专属</span>
+</div>
+
+<!-- ===== 视频区域 ===== -->
+<div class="video-wrap">
+
+  <!-- 
+    ✏️ 用法说明：
+    把下面的 XiN9SeSvy6o 换成你的 YouTube 视频 ID
+    例如 YouTube 链接是 https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    那 XiN9SeSvy6o 就是 dQw4w9WgXcQ
+
+    改好后删掉 video-placeholder 那整块，保留 iframe 就好
+  -->
+    <p>视频加载中 / 待上传</p>
+  </div>
+
+  <!-- YouTube iframe（准备好了就取消注释，把 XiN9SeSvy6o 换掉）-->
+  <!--
+  <iframe
+    src="https://www.youtube.com/embed/XiN9SeSvy6o?rel=0&modestbranding=1"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+  -->
+  <!--
+  <iframe
+    src="https://player.vimeo.com/video/VIMEO_ID?color=d4a85a&title=0&byline=0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+  -->
+
+</div>
+
+<!-- ===== 正文内容 ===== -->
+<div class="content">
+
+  <span class="lesson-tag">第 1 课</span>  <!-- ✏️ 改课节数 -->
+  <h1 class="lesson-title">AI 助力课程设计：从零打造你的第一堂课</h1>  <!-- ✏️ 改课程标题 -->
+  <p class="lesson-subtitle">时长约 45 分钟 · 建议搭配笔记本一起看</p>  <!-- ✏️ 改描述 -->
+
+  <hr class="divider">
+
+  <!-- 课程大纲 -->
+  <p class="section-label">本节内容</p>
+  <ul class="outline-list">
+    <!-- ✏️ 增减 outline-item 来修改大纲条目 -->
+    <li class="outline-item">
+      <span class="outline-num">1</span>
+      <div class="outline-text">
+        为什么 AI 可以帮你加速做课
+        <small>00:00 – 08:30</small>
+      </div>
+    </li>
+    <li class="outline-item">
+      <span class="outline-num">2</span>
+      <div class="outline-text">
+        课程框架设计的核心逻辑
+        <small>08:30 – 22:00</small>
+      </div>
+    </li>
+    <li class="outline-item">
+      <span class="outline-num">3</span>
+      <div class="outline-text">
+        用 AI 写课程大纲实战演示
+        <small>22:00 – 38:00</small>
+      </div>
+    </li>
+    <li class="outline-item">
+      <span class="outline-num">4</span>
+      <div class="outline-text">
+        本节作业与下一步行动
+        <small>38:00 – 45:00</small>
+      </div>
+    </li>
+  </ul>
+
+  <hr class="divider">
+
+  <!-- 课程资料 -->
+  <p class="section-label">课程资料</p>
+
+  <!-- ✏️ 把 href="#" 换成真实的下载链接或 Google Drive 链接 -->
+  <a href="#" class="resource-link">
+    <div class="resource-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    </div>
+    <span class="resource-name">课程讲义 PDF</span>
+    <span class="resource-arrow">↓</span>
+  </a>
+
+  <a href="#" class="resource-link">
+    <div class="resource-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    </div>
+    <span class="resource-name">AI 提示词模板</span>
+    <span class="resource-arrow">↓</span>
+  </a>
+
+  <!-- 下一节 -->
+  <div class="next-card">
+    <p class="next-label">下一节</p>
+    <p class="next-title">第 2 课：录制与剪辑你的课程视频</p>  <!-- ✏️ 改下一节标题 -->
+    <a href="#" class="next-btn">继续学习 →</a>  <!-- ✏️ href 换成下一节页面链接 -->
+  </div>
+
+</div>
+
+</body>
+</html>
